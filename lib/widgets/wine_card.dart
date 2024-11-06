@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:wine_shop/models/wine_model.dart';
 import 'package:wine_shop/widgets/favourite_button.dart';
 
@@ -22,133 +22,116 @@ class WineCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Container(
-              child: Row(
-                children: [
-                  Container(
-                    width: 110,
-                    height: 182,
-                    decoration: const BoxDecoration(
-                      border: Border(),
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
+            child: Row(
+              children: [
+                Container(
+                  width: 110,
+                  height: 182,
+                  decoration: const BoxDecoration(
+                    border: Border(),
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                    child: Image.asset(
+                      wine.image,
+                      fit: BoxFit.fill,
                     ),
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.all(Radius.circular(16)),
-                      child: Image.asset(
-                        wine.image,
-                        fit: BoxFit.fill,
+                  ),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: wine.isAvailable
+                                ? const Color.fromARGB(190, 139, 195, 74)
+                                : const Color.fromARGB(189, 195, 74, 74),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(16))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Text(
+                            wine.isAvailable ? "Available" : "Unavailable",
+                            style: TextStyle(
+                              color:
+                                  wine.isAvailable ? Colors.green : Colors.red,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              color: wine.isAvailable
-                                  ? const Color.fromARGB(190, 139, 195, 74)
-                                  : const Color.fromARGB(189, 195, 74, 74),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(16))),
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        wine.name,
+                        maxLines: 4,
+                        softWrap: true,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 6,
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/svg/wine.svg',
+                            width: 20,
+                            height: 20,
+                          ),
+                          const SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            wine.category.capitalizeFirst!,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            wine.origin.country,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Flexible(
                             child: Text(
-                              wine.isAvailable ? "Available" : "Unavailable",
-                              style: TextStyle(
-                                color: wine.isAvailable
-                                    ? Colors.green
-                                    : Colors.red,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          wine.name,
-                          maxLines: 4,
-                          softWrap: true,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 6,
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svg/wine.svg',
-                              width: 20,
-                              height: 20,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            Text(
-                              wine.category,
+                              wine.origin.city,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
-                              "(${wine.subCategory})",
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 8,
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svg/france.svg',
-                              width: 20,
-                              height: 20,
-                            ),
-                            const SizedBox(
-                              width: 3,
-                            ),
-                            const Text(
-                              "From",
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Flexible(
-                              child: Text(
-                                wine.origin,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           ),
           Container(
@@ -190,7 +173,7 @@ class WineCard extends StatelessWidget {
                         height: 16,
                       ),
                       Text(
-                        wine.vesselType,
+                        wine.bottleSize,
                         style: const TextStyle(
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),

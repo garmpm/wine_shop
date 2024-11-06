@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:wine_shop/controllers/app_controller.dart';
+import 'package:wine_shop/models/wine_model.dart';
+import 'package:wine_shop/models/wine_tags_model.dart';
 import 'package:wine_shop/widgets/address_widget.dart';
 import 'package:wine_shop/widgets/category_button.dart';
 import 'package:wine_shop/widgets/decorated_icon_button.dart';
@@ -82,16 +84,35 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 height: 50,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.categoryList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: CategoryButton(
-                        name: controller.categoryList[index],
-                        onTap: () {},
-                        isSelected: index == 0 ? true : false,
+                child: FutureBuilder<List<WineTagModel>>(
+                  future: controller.getTags(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: CategoryButton(
+                              name: snapshot.data![index].name,
+                              onTap: () {
+                                debugPrint('tag: ${snapshot.data![index].tag}');
+                              },
+                              isSelected: index == 0 ? true : false,
+                            ),
+                          );
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      debugPrint(
+                          'OOPS YOU HAVE TO PUT THE CD IN YOUR COMPUTER!');
+                    }
+                    return const Center(
+                      child: SizedBox(
+                        width: 200,
+                        height: 200,
+                        child: CircularProgressIndicator(),
                       ),
                     );
                   },
@@ -137,16 +158,32 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 height: 400,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: controller.wineList.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: WineCard(wine: controller.wineList[index]),
-                    );
-                  },
-                ),
+                child: FutureBuilder<List<WineModel>>(
+                    future: controller.getWine(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: WineCard(wine: snapshot.data![index]),
+                            );
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        debugPrint(
+                            'OOPS YOU HAVE TO PUT THE CD IN YOUR COMPUTER!');
+                      }
+                      return const Center(
+                        child: SizedBox(
+                          width: 200,
+                          height: 200,
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }),
               ),
             ],
           ),

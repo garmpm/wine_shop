@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wine_shop/models/wine_model.dart';
+import 'package:wine_shop/models/wine_tags_model.dart';
 
 class AppController extends GetxController {
   List<String> categoryList = ['Type', 'Style', 'Countries', 'Grape', 'Region'];
@@ -10,7 +13,32 @@ class AppController extends GetxController {
     'Rose wines',
   ];
 
-  List<WineModel> wineList = [
+  //RxList<WineModel> wineList = RxList();
+
+  Future<Map<String, dynamic>> loadJsonFromAssets(String filePath) async {
+    String jsonString = await rootBundle.loadString(filePath);
+    return jsonDecode(jsonString);
+  }
+
+  Future<List<WineTagModel>> getTags() async {
+    Map<String, dynamic> data =
+        await loadJsonFromAssets('assets/data/wine.json');
+    List<WineTagModel> tagList = (data["wines_by"] as List<dynamic>)
+        .map((e) => WineTagModel.fromJson(e))
+        .toList();
+    return tagList;
+  }
+
+  Future<List<WineModel>> getWine() async {
+    Map<String, dynamic> data =
+        await loadJsonFromAssets('assets/data/wine.json');
+    List<WineModel> wineList = (data["carousel"] as List<dynamic>)
+        .map((e) => WineModel.fromJson(e))
+        .toList();
+    return wineList;
+  }
+
+  /*List<WineModel> wineList = [
     WineModel(
       name: 'Ocone Bozzovich Beneventano Bianco IGT,',
       category: "Red wine",
@@ -53,5 +81,5 @@ class AppController extends GetxController {
       criticsScore: 94,
       image: "assets/images/wine4.png",
     ),
-  ];
+  ]; */
 }
