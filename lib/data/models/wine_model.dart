@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wine_shop/models/origin_model.dart';
+import 'package:wine_shop/data/models/origin_model.dart';
 
 part 'wine_model.g.dart';
 

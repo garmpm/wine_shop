@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wine_shop/pages/home_page.dart';
+import 'package:wine_shop/presentation/main_page/home_page.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:wine_shop/controllers/app_controller.dart';
-import 'package:wine_shop/models/wine_model.dart';
-import 'package:wine_shop/models/wine_tags_model.dart';
-import 'package:wine_shop/widgets/address_widget.dart';
-import 'package:wine_shop/widgets/category_button.dart';
-import 'package:wine_shop/widgets/decorated_icon_button.dart';
-import 'package:wine_shop/widgets/image_container.dart';
-import 'package:wine_shop/widgets/wine_card.dart';
+import 'package:wine_shop/domain/entities/wine_entity.dart';
+import 'package:wine_shop/domain/entities/wine_tag_entity.dart';
+import 'package:wine_shop/presentation/main_page/controllers/home_controller.dart';
+import 'package:wine_shop/presentation/main_page/widgets/address_widget.dart';
+import 'package:wine_shop/presentation/main_page/widgets/category_button.dart';
+import 'package:wine_shop/presentation/main_page/widgets/decorated_icon_button.dart';
+import 'package:wine_shop/presentation/main_page/widgets/image_container.dart';
+import 'package:wine_shop/presentation/main_page/widgets/wine_card.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -18,7 +18,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final AppController controller = Get.put(AppController());
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 height: 50,
-                child: FutureBuilder<List<WineTagModel>>(
+                child: FutureBuilder<List<WineTagEntity>>(
                   future: controller.getTags(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
@@ -158,7 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SizedBox(
                 height: 400,
-                child: FutureBuilder<List<WineModel>>(
+                child: FutureBuilder<List<WineEntity>>(
                     future: controller.getWine(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {

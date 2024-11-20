@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:wine_shop/models/wine_model.dart';
-import 'package:wine_shop/widgets/favourite_button.dart';
+import 'package:wine_shop/domain/entities/wine_entity.dart';
+import 'package:wine_shop/presentation/main_page/widgets/favourite_button.dart';
 
 class WineCard extends StatelessWidget {
-  final WineModel wine;
+  final WineEntity wine;
   const WineCard({super.key, required this.wine});
 
   @override

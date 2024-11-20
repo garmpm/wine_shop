@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:wine_shop/models/wine_model.dart';
-import 'package:wine_shop/models/wine_tags_model.dart';
+import 'package:wine_shop/data/data_sources/wine_shop_data_source.dart';
+import 'package:wine_shop/data/repository/wine_shop_repository_impl.dart';
+import 'package:wine_shop/domain/entities/wine_entity.dart';
+import 'package:wine_shop/domain/entities/wine_tag_entity.dart';
+import 'package:wine_shop/domain/use_cases/get_tags_use_case.dart';
+import 'package:wine_shop/domain/use_cases/get_wines_use_case.dart';
 
-class AppController extends GetxController {
+class HomeController extends GetxController {
   List<String> categoryList = ['Type', 'Style', 'Countries', 'Grape', 'Region'];
 
   List<String> wineColorList = [
@@ -12,6 +16,14 @@ class AppController extends GetxController {
     'White wines',
     'Rose wines',
   ];
+  RxBool isLoading = RxBool(false);
+  // RxList<WineTagEntity> tagList = RxList();
+  // RxList<WineEntity> wineList = RxList();
+
+  GetTagsUseCase getTagsUseCase =
+      GetTagsUseCase(WineShopRepositoryImpl(WineShopDataSourceImpl()));
+  GetWinesUseCase getWinesUseCase =
+      GetWinesUseCase(WineShopRepositoryImpl(WineShopDataSourceImpl()));
 
   //RxList<WineModel> wineList = RxList();
 
@@ -20,23 +32,16 @@ class AppController extends GetxController {
     return jsonDecode(jsonString);
   }
 
-  Future<List<WineTagModel>> getTags() async {
-    Map<String, dynamic> data =
-        await loadJsonFromAssets('assets/data/wine.json');
-    List<WineTagModel> tagList = (data["wines_by"] as List<dynamic>)
-        .map((e) => WineTagModel.fromJson(e))
-        .toList();
-    return tagList;
+  Future<List<WineTagEntity>> getTags() async {
+    return getTagsUseCase.call();
   }
 
-  Future<List<WineModel>> getWine() async {
-    Map<String, dynamic> data =
-        await loadJsonFromAssets('assets/data/wine.json');
-    List<WineModel> wineList = (data["carousel"] as List<dynamic>)
-        .map((e) => WineModel.fromJson(e))
-        .toList();
-    return wineList;
+  Future<List<WineEntity>> getWine() async {
+    return getWinesUseCase.call();
   }
+
+  RxList<WineTagEntity> tagList = RxList();
+  RxList<WineEntity> wineList = RxList();
 
   /*List<WineModel> wineList = [
     WineModel(
